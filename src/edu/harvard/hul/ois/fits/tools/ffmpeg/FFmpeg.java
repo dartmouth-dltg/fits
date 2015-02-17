@@ -117,6 +117,12 @@ public class FFmpeg extends ToolBase {
 			throw new FitsToolException("FFmpeg cannot be used on this system");
 		}
 
+		// Extract version number. Each tool needs to set the version number in the constructor.
+		List<String> versionCommand = new ArrayList<String>(
+			Arrays.asList (ffmpegBuild + "ffprobe", "-hide_banner", "-show_entries", 
+				"program_version=version", "-print_format", "default=nw=1:nk=1"));
+		info.setVersion(CommandLine.exec(versionCommand, null).trim());
+
 	}
 
 	// Called by FITS to invoke the tool against the input file. It must return a ToolOutput object
@@ -144,9 +150,6 @@ public class FFmpeg extends ToolBase {
 		logger.debug("Finished running FFmpeg");
 		
 		Document ffprobeXML = createXml(idenOut, valOut);
-
-		// Extract version number.
-		info.setVersion(ffprobeXML.getRootElement().getChild("program_version").getAttributeValue("version"));
 
 		Document fitsXML = transform(XSLT, ffprobeXML);
 
