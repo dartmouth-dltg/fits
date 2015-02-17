@@ -3,10 +3,10 @@
  * 
  * This file is part of FITS (File Information Tool Set).
  *
- * This class adds ffmpeg as a tool to FITS. The main purpose of 
- * adding ffmpeg is to validate video files, thought tools like ffmpeg and 
- * ffprobe could be used to provide valuable information about the file 
- * itself (ex: frame rate, codec). 
+ * This class adds FFmpeg as a tool to FITS. The main purpose of 
+ * adding FFmpeg is to identify and validate video files, thought tools 
+ * like ffmpeg and ffprobe could be used to provide other valuable 
+ * information about the file itself (ex: frame rate, codec). 
  *
  * FFmpeg binary executables were added to the FITS for both 32-bit and 
  * 64-bit Linux and Mac OS X. Windows executables are not added, but 
@@ -56,12 +56,12 @@ import edu.harvard.hul.ois.fits.tools.utils.CommandLine;
 /** 
  *  The glue class for invoking FFmpeg under FITS.
  *
- * 	The purpose adding FFmpeg to FITS is to validate video files. This class 
- * 	generates FITS XML, with a fileStatus class that has information regarding 
- * 	the validity of the video file given. 
+ * 	The purpose adding FFmpeg to FITS is to identify and validate video files. This class 
+ * 	generates FITS XML and FFprobe XML. The FFprobe XML is transformed to use the
+ * 	FITS schema.
  *
- * 	FFmpeg, as used in this class is limited to validating video files ONLY. 
- * 	Thought it could be used to validate other formats (image and audio), in 
+ * 	FFmpeg, as used in this class is limited to identifiying and validating video files 
+ * 	ONLY. Thought it could be used to validate other formats (image and audio), in 
  * 	the future. 
  *
  * 	There is logic for running this tool in Linux and Mac OS X machines, not Windows.
