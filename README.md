@@ -17,5 +17,6 @@ This new tool could be adapted to validate other video formats, as the need arri
 
 For more information about ffmpeg: https://www.ffmpeg.org/
 
-###Jhove
-Local updates have been made to Jhove and the jars in this branch reflect those changes.
+###JHOVE
+
+The version of the JHOVE in the Dartmouth branch is a specially updated version of the JHOVE in the official distribution of FITS.  Some key fixes have been backported into this version to support files commonly used at Dartmouth.
