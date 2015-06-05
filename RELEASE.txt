@@ -1,4 +1,13 @@
 RELEASE NOTES
+Version 0.8.6 (5/20/15)
+----------------------
+
+- OTS.jar update: fixed bug for invalid MIX XML mix:LumaRed error for TIFF with JPEG compression 
+
+Version 0.8.5 (5/05/15)
+----------------------
+
+- Introduce ability to suppress MD5 calculation by file type.
 
 Version 0.8.4 (1/26/15)
 ----------------------
