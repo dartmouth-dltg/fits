@@ -93,15 +93,18 @@ public class AudioStdSchemaTestXmlUnit_NoMD5 {
 
 		// Initialize attributes or elements to ignore for difference checking
 		diff.overrideDifferenceListener(new IgnoreNamedElementsDifferenceListener(
+				"version",
 				"toolversion",
 				"dateModified",
 				"fslastmodified",
+				"lastmodified",
 				"startDate",
 				"startTime",
 				"timestamp", 
 				"fitsExecutionTime",
 				"executionTime",
 				"filepath",
+				"lastmodified",				
 				"location"));
 
 		DetailedDiff detailedDiff = new DetailedDiff(diff);
