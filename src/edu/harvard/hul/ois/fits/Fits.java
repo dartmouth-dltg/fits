@@ -83,7 +83,7 @@ public class Fits {
   public static int maxThreads = 20; // GDM 16-Nov-2012
   public static final String XML_NAMESPACE = "http://hul.harvard.edu/ois/xml/ns/fits/fits_output";
 
-  public static String VERSION = "0.8.6";
+  public static String VERSION = "0.8.10";
 
   private ToolOutputConsolidator consolidator;
   private static XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
@@ -119,12 +119,13 @@ public class Fits {
     FITS_TOOLS = FITS_HOME + "tools" + File.separator;
 
     // Set up logging.
-    // Now using an explicit properties file, because otherwoise DROID will
+    // Now using an explicit properties file, because otherwise DROID will
     // hijack it, and it's cleaner this way anyway.
     
-	File    log4jProperties = new File(FITS_TOOLS + "log4j.properties");
-	System.setProperty( "log4j.configuration", log4jProperties.toURI().toString());
-
+    //  Logging fix from "paulmer"
+    File log4jProperties = new File(FITS_TOOLS + "log4j.properties");
+    System.setProperty( "log4j.configuration", log4jProperties.toURI().toString());
+ 
     logger = Logger.getLogger( this.getClass() );
     try {
       config = new XMLConfiguration( FITS_XML + "fits.xml" );
