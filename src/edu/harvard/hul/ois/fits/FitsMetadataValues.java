@@ -1,20 +1,13 @@
-/* 
- * 
- * This file is part of FITS (File Information Tool Set).
- * 
- * FITS is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * FITS is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with FITS.  If not, see <http://www.gnu.org/licenses/>.
- */
+//
+// Copyright (c) 2016 by The President and Fellows of Harvard College
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License. You may obtain a copy of the License at:
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permission and limitations under the License.
+//
+
 package edu.harvard.hul.ois.fits;
 
 import java.io.BufferedReader;
@@ -28,19 +21,19 @@ import org.apache.log4j.Logger;
  *  as some standard values. All components are static.
  */
 public class FitsMetadataValues {
-	
+
 	private static FitsMetadataValues instance;
-	
+
 	private Logger logger = Logger.getLogger(this.getClass());
-	
-	private String mimeMapProperties = Fits.FITS_XML + "mime_map.txt";
-	private String formatMapProperties = Fits.FITS_XML + "format_map.txt";
-	private String mimeToFormatMapProperties = Fits.FITS_XML + "mime_to_format_map.txt";
-	
+
+	private String mimeMapProperties = Fits.FITS_XML_DIR + "mime_map.txt";
+	private String formatMapProperties = Fits.FITS_XML_DIR + "format_map.txt";
+	private String mimeToFormatMapProperties = Fits.FITS_XML_DIR + "mime_to_format_map.txt";
+
     private HashMap<String, String> mimeMap = new HashMap<String, String>();
     private HashMap<String, String> formatMap = new HashMap<String, String>();
     private HashMap<String, String> mimeToFormatMap = new HashMap<String, String>();
-    
+
 	public final static String DEFAULT_MIMETYPE="application/octet-stream";
 	public final static String DEFAULT_FORMAT="Unknown Binary";
 
@@ -50,7 +43,7 @@ public class FitsMetadataValues {
     public final static String IMAGE = "image";
     public final static String TEXT = "text";
     public final static String VIDEO = "video";
-    
+
     /** Standard property element names. The idea is to include them
      *  all here, even the ones that are generated only by
      *  XSLT. */
@@ -72,18 +65,25 @@ public class FitsMetadataValues {
     public final static String BLOCK_SIZE_MIN = "blockSizeMin";
     public final static String BRIGHTNESS_VALUE = "brightnessValue";
     public final static String BYTE_ORDER = "byteOrder";      // for possible future use
+    public final static String CATEGORY = "category";
     public final static String CFA_PATTERN = "cfaPattern";    // image
     public final static String CFA_PATTERN2 = "cfaPattern2";  // image
     public final static String CHANNELS = "channels";          // audio, maybe video
+    public final static String CHARACTER_COUNT = "characterCount";
     public final static String CHARSET = "charset";            // text
     public final static String COLOR_SPACE = "colorSpace";
+    public final static String COMPANY = "company";
     public final static String COMPRESSION_SCHEME = "compressionScheme";
+    public final static String CREATING_APPLICATION_NAME = "creatingApplicationName";
+    public final static String CREATING_APPLICATION_VERSION = "creatingApplicationVersion";
     public final static String DATA_FORMAT_TYPE = "dataFormatType";
+    public final static String DESCRIPTION = "description";
     public final static String DIGITAL_CAMERA_MANUFACTURER = "digitalCameraManufacturer";
     public final static String DIGITAL_CAMERA_MODEL_NAME = "digitalCameraModelName";
     public final static String DIGITAL_CAMERA_SERIAL_NO = "digitalCameraSerialNo";
     public final static String DURATION = "duration";
     public final static String EXIF_VERSION = "exifVersion";
+    public final static String HAS_EMBEDDED_RESOURCES = "hasEmbeddedResources";
     public final static String EXPOSURE_BIAS_VALUE = "exposureBiasValue";
     public final static String EXPOSURE_INDEX = "exposureIndex";
     public final static String EXPOSURE_PROGRAM = "exposureProgram";
@@ -96,11 +96,15 @@ public class FitsMetadataValues {
     public final static String GRAY_RESPONSE_UNIT = "grayResponseUnit";
     public final static String ICC_PROFILE_NAME = "iccProfileName";
     public final static String ICC_PROFILE_VERSION = "iccProfileVersion";
+    public final static String IDENTIFIER = "identifier";
+    public final static String IMAGE_COUNT = "graphicsCount";
     public final static String IMAGE_HEIGHT = "imageHeight";
     public final static String IMAGE_WIDTH = "imageWidth";
     public final static String ISO_SPEED_RATING = "isoSpeedRating";
     public final static String LANGUAGE = "language";      // may be useful someday
+    public final static String LAST_MODIFIED = "lastmodified";
     public final static String LIGHT_SOURCE = "lightSource";
+    public final static String LINE_COUNT = "lineCount";     // document
     public final static String MARKUP_BASIS = "markupBasis";
     public final static String MARKUP_BASIS_VERSION = "markupBasisVersion";
     public final static String MARKUP_LANGUAGE = "markupLanguage";
@@ -111,9 +115,13 @@ public class FitsMetadataValues {
     public final static String NUM_SAMPLES = "numSamples";       // audio
     public final static String OFFSET = "offset";
     public final static String ORIENTATION = "orientation";       // image, video
+    public final static String PUBLISHER = "publisher";
     public final static String PIXEL_ASPECT_RATIO = "pixelAspectRatio";  // video
     public final static String ROTATION = "rotation";        // image, video
     public final static String PAGE_COUNT = "pageCount";     // document
+    public final static String PARAGRAPH_COUNT = "paragraphCount";     // document
+    public final static String IS_RIGHTS_MANAGED = "isRightsManaged";
+    public final static String IS_PROTECTED = "isProtected";
     public final static String PRIMARY_CHROMATICITIES_BLUE_X = "primaryChromaticitiesBlueX";
     public final static String PRIMARY_CHROMATICITIES_BLUE_Y = "primaryChromaticitiesBlueY";
     public final static String PRIMARY_CHROMATICITIES_GREEN_X = "primaryChromaticitiesGreenX";
@@ -131,9 +139,11 @@ public class FitsMetadataValues {
     public final static String SCANNING_SOFTWARE_NAME = "scanningSoftwareName";
     public final static String SENSING_METHOD = "sensingMethod";
     public final static String SHUTTER_SPEED_VALUE = "shutterSpeedValue";
+    public final static String SIZE = "size";
     public final static String SPECTRAL_SENSITIVITY = "spectralSensitivity";
     public final static String SOFTWARE = "software";
     public final static String SUBJECT = "subject";
+    public final static String TABLE_COUNT = "tableCount";
     public final static String TIMECODE = "timecode";   // SMPTE timecode, for future use
     public final static String TILE_HEIGHT = "tileHeight";   // image, esp. TIFF
     public final static String TILE_WIDTH = "tileWidth";
@@ -146,7 +156,7 @@ public class FitsMetadataValues {
     public final static String YCBCR_COEFFICIENTS = "YCbCrCoefficients";
     public final static String YCBCR_POSITIONING = "YCbCrPositioning";
     public final static String YCBCR_SUBSAMPLING = "YCbCrSubSampling";
-    
+
     /** Standard compression values. */
     public final static String CMPR_NONE = "Uncompressed";
     public final static String CMPR_JP2 = "JPEG 2000";
@@ -174,20 +184,20 @@ public class FitsMetadataValues {
     public final static String CMPR_DCS = "DCS";
     public final static String CMPR_SGILOG = "SGILog";
     public final static String CMPR_SGILOG24 = "SGILog24";
-    
-    
+
+
     private FitsMetadataValues() {
-    	
+
     	mimeMap = parseFile(mimeMapProperties);
     	formatMap = parseFile(formatMapProperties);
     	mimeToFormatMap = parseFile(mimeToFormatMapProperties);
-    	
+
     }
-    
+
 	public static synchronized FitsMetadataValues getInstance() {
 		if (instance == null)
 			instance = new FitsMetadataValues();
-		
+
 		return instance;
 	}
 
@@ -204,7 +214,7 @@ public class FitsMetadataValues {
             return mime;
         }
     }
-    
+
     public String normalizeFormat(String format) {
         if (format == null || format.length()==0) {
             return DEFAULT_FORMAT;
@@ -217,14 +227,14 @@ public class FitsMetadataValues {
             return format;
         }
     }
-    
+
     public String getFormatForMime(String mime) {
         if (mime == null || mime.length()==0) {
             return DEFAULT_FORMAT;
         }
         return mimeToFormatMap.get(mime);
     }
-    
+
     private HashMap<String,String> parseFile(String inputFile) {
     	HashMap<String,String> map = new HashMap<String,String>();
     	BufferedReader in = null;
@@ -242,10 +252,10 @@ public class FitsMetadataValues {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Error reading or parsing input file: " + inputFile, e);
 		}
 		finally {
-			if(in != null) try {in.close(); } catch (IOException e) { }
+			if(in != null) try {in.close(); } catch (IOException e) { } // nothing to do if exception when closing file
 		}
 		return map;
     }

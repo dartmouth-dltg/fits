@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="2.0"
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
    xmlns:fits_XsltFunctions="edu.harvard.hul.ois.fits.tools.utils.XsltFunctions"
@@ -31,13 +32,13 @@
    		                <xsl:attribute name="mimetype">                   
        			           <xsl:choose>
       			               <xsl:when test="contains($formatLC, 'mpeg-4')">
-       			                   <xsl:value-of select="string('video/mp4')"/>
+       			                   <xsl:value-of select="string('video/quicktime')"/>
        			               </xsl:when>
        			               <xsl:when test="contains($formatLC, 'mpeg')">
        			                   <xsl:value-of select="string('video/mpg')"/>
        			               </xsl:when>
       			               <xsl:when test="$formatLC = 'quicktime'">
-       			                   <xsl:value-of select="string('video/mp4')"/>
+       			                   <xsl:value-of select="string('video/quicktime')"/>
        			               </xsl:when> 
       			               <xsl:when test="$formatLC = 'mxf'">
        			                   <xsl:value-of select="string('application/mxf')"/>
@@ -58,7 +59,7 @@
        			                   <xsl:value-of select="string('video/x-dv')"/>
        			               </xsl:when> 
       			               <xsl:when test="contains($formatLC, 'avc')">
-       			                   <xsl:value-of select="string('video/mp4')"/>
+       			                   <xsl:value-of select="string('video/quicktime')"/>
        			               </xsl:when>       			                         			              			             			       
 		                       <xsl:otherwise>
 				                   <xsl:text>TBD</xsl:text>
@@ -67,10 +68,17 @@
 		                </xsl:attribute>
 		                
 		                <xsl:attribute name="format">
-		                    <xsl:value-of select="./Format"/>
+                           <xsl:choose>
+                               <xsl:when test="$format = 'MXF'">
+                                   <xsl:value-of select="string('Material Exchange Format (MXF)')"/>
+                               </xsl:when>
+                               <xsl:otherwise>
+                                   <xsl:value-of select="$format"/>
+                               </xsl:otherwise>
+                           </xsl:choose>
 		                </xsl:attribute>                          
                 
-                    </identity>                
+                    </identity>
 		        </identification>
 		        		        
             </xsl:if>
@@ -120,13 +128,13 @@
       			<mimeType>
        			   <xsl:choose>
       			       <xsl:when test="contains($formatLC, 'mpeg-4')">
-       			           <xsl:value-of select="string('video/mp4')"/>
+       			           <xsl:value-of select="string('video/quicktime')"/>
        			       </xsl:when>
        			       <xsl:when test="contains($formatLC, 'mpeg')">
        			           <xsl:value-of select="string('video/mpg')"/>
        			       </xsl:when>
       			       <xsl:when test="$formatLC = 'quicktime'">
-       			           <xsl:value-of select="string('video/mp4')"/>
+       			           <xsl:value-of select="string('video/quicktime')"/>
        			       </xsl:when> 
       			       <xsl:when test="$formatLC = 'mxf'">
        			           <xsl:value-of select="string('application/mxf')"/>
@@ -147,7 +155,7 @@
        			           <xsl:value-of select="string('video/x-dv')"/>
        			       </xsl:when>
       			       <xsl:when test="contains($formatLC, 'avc')">
-       			           <xsl:value-of select="string('video/mp4')"/>
+       			           <xsl:value-of select="string('video/quicktime')"/>
        			       </xsl:when>        			                			              			             			       
 		               <xsl:otherwise>
 				           <xsl:text>TBD</xsl:text>
@@ -217,7 +225,13 @@
        			    </videoDataEncoding>
                     
                     <!-- codecId is only visible via the MediaInfo API. Set in Java code. -->
-                    <codecId/>                     
+                    <codecId/>
+                    <!-- codecCC is only visible via the MediaInfo API. Set in Java code. -->
+                    <codecCC/>
+                    <!-- codecVersion is only visible via the MediaInfo API. Set in Java code. -->
+                    <codecVersion/>
+                    <!-- codecName is only visible via the MediaInfo API. Set in Java code. -->
+                    <codecName/>                                                                               
                     <!-- codecFamily is only visible via the MediaInfo API. Set in Java code. -->
                     <codecFamily /> 
                     <!-- codecInfo is only visible via the MediaInfo API. Set in Java code. -->
@@ -258,7 +272,7 @@
 					                <xsl:text>Unknown</xsl:text>             				        
 				                </xsl:when>
                                 <xsl:when test="$codecLC='r10g'">
-			                        <xsl:text>TODO</xsl:text>                				        
+			                        <xsl:text>Lossless</xsl:text>                				        
 				                </xsl:when>					                
                                 <xsl:when test="$codecLC='dvc'">
 					                <xsl:text>Lossy</xsl:text>             				        
@@ -294,13 +308,13 @@
 					                <xsl:text>Unknown</xsl:text>             				        
 				                </xsl:when>
                                 <xsl:when test="$codecLC='apcn'">
-					                <xsl:text>TODO</xsl:text>             				        
+					                <xsl:text>Unknown</xsl:text>             				        
 				                </xsl:when>				                
                                 <xsl:when test="$codecLC='avc1'">
 					                <xsl:text>Unknown</xsl:text>             				        
 				                </xsl:when>
                                 <xsl:when test="$codecLC='r10g'">
-			                        <xsl:text>TODO</xsl:text>                				        
+			                        <xsl:text>Unknown</xsl:text>                				        
 				                </xsl:when>					                
                                 <xsl:when test="$codecLC='dvc'">
 					                <xsl:text>Unknown</xsl:text>             				        
@@ -439,9 +453,12 @@
                                     <xsl:when test="$codecLC='apch'">
 					                    <xsl:text>interlaced</xsl:text>             				        
 				                    </xsl:when>
+				                    <!-- If no scan type returned, then the element is not present -->
+				                    <!--
                                     <xsl:when test="$codecLC='apcn'">
-					                    <xsl:text>TODO</xsl:text>             				        
-				                    </xsl:when>				                    
+					                    <xsl:text></xsl:text>             				        
+				                    </xsl:when>
+				                    -->			                    
 				                    <xsl:when test="$codecLC='r10g'">
 					                    <xsl:text>Progressive</xsl:text>             				        
 				                    </xsl:when>				                    
@@ -479,7 +496,10 @@
        			    </chromaSubsampling>
        			    <colorspace>
        			        <xsl:value-of select="./Color_space"/>
-       			    </colorspace>       			      			                              	                  	    
+       			    </colorspace>
+       			    <broadcastStandard>
+       			        <xsl:value-of select="./Standard"/>
+       			    </broadcastStandard>        			          			      			                              	                  	    
 	           </track>	
             </xsl:if>
             <!-- End Video Track -->
@@ -558,8 +578,7 @@
                     <channels>
                         <xsl:value-of select="./Channel_s_"/>
                     </channels>
-                    
-                    <!-- TODO -->
+
                     <!-- This is calculated in Java, based upon the soundField  -->
                     <channelInfo />
 

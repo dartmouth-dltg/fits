@@ -109,6 +109,7 @@
 	<map format="LA" transform="exiftool_audio_to_fits.xslt"/>
 	<map format="M4A" transform="exiftool_audio_to_fits.xslt"/>
 	<map format="MP3" transform="exiftool_audio_to_fits.xslt"/>
+	<map format="M4A" transform="exiftool_audio_to_fits.xslt"/>
 	<map format="MPC" transform="exiftool_audio_to_fits.xslt"/>
 	<map format="OFR" transform="exiftool_audio_to_fits.xslt"/>
 	<map format="OGG" transform="exiftool_audio_to_fits.xslt"/>
@@ -138,7 +139,6 @@
 	<map format="M2T" transform="exiftool_video_to_fits.xslt"/>
 	<map format="M2TS" transform="exiftool_video_to_fits.xslt"/>
 	<map format="M2V" transform="exiftool_video_to_fits.xslt"/>
-	<map format="M4A" transform="exiftool_video_to_fits.xslt"/>
 	<map format="M4P" transform="exiftool_video_to_fits.xslt"/>
 	<map format="M4V" transform="exiftool_video_to_fits.xslt"/>
 	<map format="MKA" transform="exiftool_video_to_fits.xslt"/>
@@ -214,5 +214,8 @@
 	<map format="XLT" transform="exiftool_document_to_fits.xslt"/>
 	<map format="XLTM" transform="exiftool_document_to_fits.xslt"/>
 	<map format="XLTX" transform="exiftool_document_to_fits.xslt"/>
+    <map format="WP" transform="exiftool_document_to_fits.xslt"/>
+    <map format="WPD" transform="exiftool_document_to_fits.xslt"/>
+    <map format="EPUB" transform="exiftool_document_to_fits.xslt"/>
 
 </transformMap>

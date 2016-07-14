@@ -1,6 +1,5 @@
 /build_local
 *.class
-/fitsBasicTestOutput.xml
 CVS
 TAGS
 
@@ -9,3 +8,9 @@ TAGS
 
 # Mac OS X system file
 .DS_Store
+/fits.log
+/lib-fits/
+/classes/
+/build/
+/fits-tests.log
+/javadoc/

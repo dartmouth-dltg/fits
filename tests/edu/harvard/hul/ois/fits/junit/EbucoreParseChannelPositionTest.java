@@ -27,15 +27,18 @@
  **********************************************************************/
 package edu.harvard.hul.ois.fits.junit;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.fail;
+
 import java.util.List;
+
+import org.junit.Test;
 
 import edu.harvard.hul.ois.fits.tools.mediainfo.ChannelPositionParser;
 import edu.harvard.hul.ois.fits.tools.mediainfo.ChannelPositionWrapper;
 import edu.harvard.hul.ois.ots.schemas.XmlContent.XmlContentException;
 
-import org.junit.Test;
-
-public class EbucoreParseChannelPositionTest extends junit.framework.TestCase {
+public class EbucoreParseChannelPositionTest {
 	
 	// Taken and revised from a MediaInfo header file
 	private static final String[] DTS_ChannelPositions =
@@ -234,9 +237,10 @@ public class EbucoreParseChannelPositionTest extends junit.framework.TestCase {
 						" X: " + channel.getXpos() + " \t " +
 						" Y: " + channel.getYpos() );
 			}
+			fail("An exception should have occurred.");
 		} catch ( XmlContentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			assertEquals( "A is not a valid position ", e.getMessage() );
 		}
 
 
@@ -245,9 +249,10 @@ public class EbucoreParseChannelPositionTest extends junit.framework.TestCase {
 		System.out.println("\n\n-- " + channelsStr + " -- ");	
 		try {
 			channelList = app.getChannelsFromString(channelsStr);
+			fail("An exception should have occurred.");
 		} catch ( XmlContentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			assertEquals(" Bogus: L R Contains an invalid position identifier", e.getMessage());
 		}
 
 		//
@@ -263,11 +268,11 @@ public class EbucoreParseChannelPositionTest extends junit.framework.TestCase {
 		try {
 			channelList = app.getChannelsFromString(channelsStr);
 		} catch ( XmlContentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("No Exception should occur. Default values will be set.");
 		}
 		if (channelList == null || channelList.isEmpty()) {
-			System.out.println(channelsStr + " produces an empty channel list");
+			//System.out.println(channelsStr + " produces an empty channel list");
+			fail("Default values should be be set.");			
 		} 	
 
 	}

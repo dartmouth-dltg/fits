@@ -19,17 +19,14 @@
 package edu.harvard.hul.ois.fits.junit;
 
 import java.io.File;
+
 import org.junit.Test;
 
 import edu.harvard.hul.ois.fits.Fits;
 import edu.harvard.hul.ois.fits.FitsOutput;
 import edu.harvard.hul.ois.fits.tools.Tool;
 
-import org.custommonkey.xmlunit.*;
-
-
-public class FitsBasicTest extends XMLTestCase {
-
+public class FitsBasicTest {
     
 	@Test
 	public void testFits() throws Exception {	
@@ -46,7 +43,7 @@ public class FitsBasicTest extends XMLTestCase {
     	}
     	
     	FitsOutput fitsOut = fits.examine(input);
-    	fitsOut.saveToDisk("fitsBasicTestOutput.xml");
+    	fitsOut.saveToDisk("test-generated-output/fitsBasicTestOutput.xml");
     	
 	}
 
