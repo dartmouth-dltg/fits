@@ -465,6 +465,13 @@ public class EbuCoreModel {
     	case formatProfile:
     	case format:
     		Comment comment = new Comment(dataValue);
+    		// Add the type label
+    		if (formatElem.name().equals("formatProfile")) {
+    	   		comment.setTypeLabel("formatProfile");    			
+    		}
+    		else {
+    	   		comment.setTypeLabel("format");    			
+    		}
     		this.containerFormat.addComment(comment);
     		break;
     	case duration:
