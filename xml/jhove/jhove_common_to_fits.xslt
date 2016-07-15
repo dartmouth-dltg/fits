@@ -1,8 +1,8 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="2.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fits_XsltFunctions="edu.harvard.hul.ois.fits.tools.utils.XsltFunctions"
-	xmlns:mix="http://www.loc.gov/mix/"
+	xmlns:mix="http://www.loc.gov/mix/v20"
 	xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output">
 	<xsl:output method="xml" indent="yes" />
 	<xsl:strip-space elements="*"/>
@@ -96,6 +96,12 @@
 					</xsl:when>
 					<xsl:when test="starts-with($format,'PDF')">
 						<xsl:choose>
+							<xsl:when test="//profiles[profile='ISO PDF/A-1, Level A']">
+								<xsl:value-of select="string('PDF/A')"/>
+							</xsl:when>
+							<xsl:when test="//profiles[profile='ISO PDF/A-1, Level B']">
+								<xsl:value-of select="string('PDF/A')"/>
+							</xsl:when>
 							<xsl:when test="//profiles[profile='ISO PDF/X-1a']">
 								<xsl:value-of select="string('PDF/X')"/>
 							</xsl:when>
@@ -107,12 +113,6 @@
 							</xsl:when>
 							<xsl:when test="//profiles[profile='ISO PDF/X-2']">
 								<xsl:value-of select="string('PDF/X')"/>
-							</xsl:when>
-							<xsl:when test="//profiles[profile='ISO PDF/A-1, Level A']">
-								<xsl:value-of select="string('PDF/A')"/>
-							</xsl:when>
-							<xsl:when test="//profiles[profile='ISO PDF/A-1, Level B']">
-								<xsl:value-of select="string('PDF/A')"/>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:value-of select="string('Portable Document Format')"/>
@@ -141,6 +141,12 @@
 			<xsl:if test='repInfo/version'>
 				<version>
 					<xsl:choose>			
+						<xsl:when test="//profiles[profile='ISO PDF/A-1, Level A']">
+							<xsl:value-of select="string('1a')"/>
+						</xsl:when>
+						<xsl:when test="//profiles[profile='ISO PDF/A-1, Level B']">
+							<xsl:value-of select="string('1b')"/>
+						</xsl:when>
 						<xsl:when test="//profiles[profile='ISO PDF/X-1a']">
 							<xsl:value-of select="string('1a:2003')"/>
 						</xsl:when>
@@ -152,12 +158,6 @@
 						</xsl:when>
 						<xsl:when test="//profiles[profile='ISO PDF/X-2']">
 							<xsl:value-of select="string('2:2003')"/>
-						</xsl:when>
-						<xsl:when test="//profiles[profile='ISO PDF/A-1, Level A']">
-							<xsl:value-of select="string('1a')"/>
-						</xsl:when>
-						<xsl:when test="//profiles[profile='ISO PDF/A-1, Level B']">
-							<xsl:value-of select="string('1b')"/>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:value-of select="repInfo/version" />

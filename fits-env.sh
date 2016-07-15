@@ -13,43 +13,25 @@ export FITS_HOME
 # concatenate args and use eval/exec to preserve spaces in paths, options and args
 args=""
 for arg in "$@" ; do
-	args="$args \"$arg\""
+    args="$args \"$arg\""
 done
 
+# Application classpath
+APPCLASSPATH=""
 JCPATH=${FITS_HOME}/lib
 # Add on extra jar files to APPCLASSPATH
 for i in "$JCPATH"/*.jar; do
-	APPCLASSPATH="$APPCLASSPATH":"$i"
+    APPCLASSPATH="$APPCLASSPATH":"$i"
 done
 
-JCPATH=${FITS_HOME}/lib/droid
-# Add on extra jar files to APPCLASSPATH
-for i in "$JCPATH"/*.jar; do
-	APPCLASSPATH="$APPCLASSPATH":"$i"
-done
+# all subdirectories of ${FITS_HOME}/lib/ get loaded dynamically at runtime. DO NOT add here!
 
-JCPATH=${FITS_HOME}/lib/jhove
-# Add on extra jar files to APPCLASSPATH
-for i in "$JCPATH"/*.jar; do
-	APPCLASSPATH="$APPCLASSPATH":"$i"
+# PLM - this doesn't seem to be the case 7/15/16
+for lib in adltool audioinfo droid exiftool ffident fileinfo fileutility jhove mediainfo nzmetool tika
+do
+	JCPATH=${FITS_HOME}/lib/${lib}
+    # Add on extra jar files to APPCLASSPATH
+	for i in "$JCPATH"/*.jar; do
+		APPCLASSPATH="$APPCLASSPATH":"$i"
+	done
 done
-
-JCPATH=${FITS_HOME}/lib/mediainfo
-# Add on extra jar files to APPCLASSPATH
-for i in "$JCPATH"/*.jar; do
-	APPCLASSPATH="$APPCLASSPATH":"$i"
-done
-
-JCPATH=${FITS_HOME}/lib/nzmetool
-# Add on extra jar files to APPCLASSPATH
-for i in "$JCPATH"/*.jar; do
-	APPCLASSPATH="$APPCLASSPATH":"$i"
-done
-
-JCPATH=${FITS_HOME}/lib/nzmetool/adapters
-# Add on extra jar files to APPCLASSPATH
-for i in "$JCPATH"/*.jar; do
-	APPCLASSPATH="$APPCLASSPATH":"$i"
-done
-
-APPCLASSPATH="$APPCLASSPATH":"$FITS_HOME/xml/nlnz"

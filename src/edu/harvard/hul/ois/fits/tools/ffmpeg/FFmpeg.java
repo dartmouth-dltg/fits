@@ -69,7 +69,7 @@ import edu.harvard.hul.ois.fits.tools.utils.CommandLine;
  */
 public class FFmpeg extends ToolBase {
 
-	public final static String XSLT = Fits.FITS_XML + "ffmpeg/ffmpeg_to_fits.xslt";
+	public final static String XSLT = Fits.FITS_HOME + "xml/ffmpeg/ffmpeg_to_fits.xslt";
 	public final static String FFPROBE = "ffprobe";
 	public final static String FFMPEG	= "ffmpeg";
 
