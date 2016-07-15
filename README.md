@@ -1,6 +1,6 @@
-#FITS
+FITS
+====
 
-<<<<<<< HEAD
 Dartmouth Customizations
 ------------------------
 For official releases and documentation visit http://fitstool.org
