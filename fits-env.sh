@@ -27,6 +27,17 @@ done
 # all subdirectories of ${FITS_HOME}/lib/ get loaded dynamically at runtime. DO NOT add here!
 
 # PLM - this doesn't seem to be the case 7/15/16
+
+for lib in lib-fits/
+do
+	JCPATH=${FITS_HOME}/${lib}
+    # Add on extra jar files to APPCLASSPATH
+	for i in "$JCPATH"/*.jar; do
+		APPCLASSPATH="$APPCLASSPATH":"$i"
+	done
+done
+
+
 for lib in adltool audioinfo droid exiftool ffident fileinfo fileutility jhove mediainfo nzmetool nzmetool/adapters tika
 do
 	JCPATH=${FITS_HOME}/lib/${lib}
@@ -35,5 +46,6 @@ do
 		APPCLASSPATH="$APPCLASSPATH":"$i"
 	done
 done
+
 
 APPCLASSPATH="$APPCLASSPATH:$FITS_HOME/xml/nlnz"
