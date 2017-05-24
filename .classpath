@@ -8,9 +8,8 @@
 	<classpathentry kind="lib" path="lib-ant/xmlunit-1.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/serializer.jar"/>
-	<classpathentry kind="lib" path="lib/jhove/jhove-handler.jar"/>
-	<classpathentry kind="lib" path="lib/jhove/jhove.jar"/>
-	<classpathentry kind="lib" path="lib/jhove/jhove-module.jar"/>
+	<classpathentry kind="lib" path="lib/jhove/jhove-core-1.16.5.jar"/>
+	<classpathentry kind="lib" path="lib/jhove/jhove-modules-1.16.5.jar"/>
 	<classpathentry kind="lib" path="lib/jdom.jar"/>
 	<classpathentry kind="lib" path="lib/saxpath.jar"/>
 	<classpathentry kind="lib" path="lib/fast-md5.jar"/>
@@ -22,7 +21,7 @@
 	<classpathentry kind="lib" path="lib/saxon9-jdom.jar"/>
 	<classpathentry kind="lib" path="lib/saxon9.jar"/>
 	<classpathentry kind="lib" path="lib/AES31.jar"/>
-	<classpathentry kind="lib" path="lib/hclaps.jar"/>
+	<classpathentry kind="lib" path="lib/hclaps-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/stax2-api-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/woodstox-core-lgpl-4.0.7.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar"/>
@@ -185,6 +184,6 @@
 	<classpathentry kind="lib" path="lib/droid/stax-api-1.0-2.jar"/>
 	<classpathentry kind="lib" path="lib/droid/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="lib/droid/xml-apis-1.3.04.jar"/>
-	<classpathentry kind="lib" path="lib/ots_1.0.38.jar"/>
+	<classpathentry kind="lib" path="lib/ots_1.0.43.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

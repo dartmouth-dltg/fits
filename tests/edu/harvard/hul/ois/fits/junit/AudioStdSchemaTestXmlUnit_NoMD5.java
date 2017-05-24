@@ -18,84 +18,83 @@
  */
 package edu.harvard.hul.ois.fits.junit;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLIdentical;
-
 import java.io.File;
-import java.util.List;
 import java.util.Scanner;
 
-import org.custommonkey.xmlunit.DetailedDiff;
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.Difference;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.harvard.hul.ois.fits.Fits;
 import edu.harvard.hul.ois.fits.FitsOutput;
+import edu.harvard.hul.ois.fits.tests.AbstractXmlUnitTest;
 
-public class AudioStdSchemaTestXmlUnit_NoMD5 {
+public class AudioStdSchemaTestXmlUnit_NoMD5 extends AbstractXmlUnitTest {
+
+	/*
+	 *  Only one Fits instance is needed to run all tests.
+	 *  This also speeds up the tests.
+	 */
+	private static Fits fits;
+
+	@BeforeClass
+	public static void beforeClass() throws Exception {
+		// Set up FITS for entire class.
+		fits = new Fits();
+	}
+	
+	@AfterClass
+	public static void afterClass() {
+		fits = null;
+	}
+    
+    @Test  
+	public void testAudioChunk() throws Exception {   
+
+		String inputFilename = "testchunk.wav";
+    	File input = new File("testfiles/" + inputFilename);
+    	FitsOutput fitsOut = fits.examine(input);
+    	fitsOut.saveToDisk("test-generated-output/" + inputFilename + ACTUAL_OUTPUT_FILE_SUFFIX);
+    	
+		XMLOutputter serializer = new XMLOutputter(Format.getPrettyFormat());
+		String actualXmlStr = serializer.outputString(fitsOut.getFitsXml());
+
+		// Read in the expected XML file
+		Scanner scan = new Scanner(new File(
+				"testfiles/output/" + inputFilename + EXPECTED_OUTPUT_FILE_SUFFIX));
+		String expectedXmlStr = scan.
+				useDelimiter("\\Z").next();
+		scan.close();
+
+		testActualAgainstExpected(actualXmlStr, expectedXmlStr, inputFilename);
+	}
+
 	
 	@Test  
 	public void testAudioMD_noMD5() throws Exception {
 		
+		// use an alternate fits.xml file where a MD5 checksum is not generated
 		File fitsConfigFile = new File("testfiles/properties/fits_no_md5_audio.xml");
     	Fits fits = new Fits(null, fitsConfigFile);
 		
 		// First generate the FITS output
-		File input = new File("testfiles/test.wav");
+		String inputFilename = "test.wav";
+    	File input = new File("testfiles/" + inputFilename);
 		FitsOutput fitsOut = fits.examine(input);
-    	fitsOut.saveToDisk("test-generated-output/FITS_test_wav_NO_MD5_Output.xml");
+    	fitsOut.saveToDisk("test-generated-output/" + inputFilename + ACTUAL_OUTPUT_FILE_SUFFIX);
 
 		XMLOutputter serializer = new XMLOutputter(Format.getPrettyFormat());
 		String actualXmlStr = serializer.outputString(fitsOut.getFitsXml());
 
 		// Read in the expected XML file
 		Scanner scan = new Scanner(new File(
-				"testfiles/output/FITS_test_wav_NO_MD5.xml"));
+				"testfiles/output/" + inputFilename + EXPECTED_OUTPUT_FILE_SUFFIX));
 		String expectedXmlStr = scan.
 				useDelimiter("\\Z").next();
 		scan.close();
 
-		// Set up XMLUnit
-		XMLUnit.setIgnoreWhitespace(true); 
-		XMLUnit.setNormalizeWhitespace(true); 		
-
-		Diff diff = new Diff(expectedXmlStr,actualXmlStr);
-
-		// Initialize attributes or elements to ignore for difference checking
-		diff.overrideDifferenceListener(new IgnoreNamedElementsDifferenceListener(
-				"version",		// fits[@version]
-				"toolversion",
-				"dateModified",
-				"fslastmodified",
-				"lastmodified",
-				"startDate",
-				"startTime",
-				"timestamp", 
-				"fitsExecutionTime",
-				"executionTime",
-				"filepath",
-				"location",
-				"message"));
-
-		DetailedDiff detailedDiff = new DetailedDiff(diff);
-
-		// Display any Differences
-		List<Difference> diffs = detailedDiff.getAllDifferences();
-		if (!diff.identical()) { 
-			StringBuffer differenceDescription = new StringBuffer(); 
-			differenceDescription.append(diffs.size()).append(" differences"); 
-			
-			System.out.println(differenceDescription.toString());
-			for(Difference difference : diffs) {
-				System.out.println(difference.toString());
-			}
-
-		}
-		
-		assertXMLIdentical("Differences in XML", diff, true);
+		testActualAgainstExpected(actualXmlStr, expectedXmlStr, inputFilename);
 	}
-
 }

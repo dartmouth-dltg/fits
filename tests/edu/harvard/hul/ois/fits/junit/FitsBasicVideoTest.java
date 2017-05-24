@@ -20,16 +20,16 @@ package edu.harvard.hul.ois.fits.junit;
 
 import java.io.File;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import edu.harvard.hul.ois.fits.Fits;
 import edu.harvard.hul.ois.fits.FitsOutput;
+import edu.harvard.hul.ois.fits.tests.AbstractLoggingTest;
 import edu.harvard.hul.ois.fits.tools.Tool;
 
-public class FitsBasicVideoTest {
+public class FitsBasicVideoTest extends AbstractLoggingTest {
 	
 	/*
 	 *  Only one Fits instance is needed to run all tests.
@@ -39,9 +39,7 @@ public class FitsBasicVideoTest {
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		// Set up XMLUnit and FITS for entire class.
-		XMLUnit.setIgnoreWhitespace(true);
-		XMLUnit.setNormalizeWhitespace(true);
+		// Set up FITS for entire class.
 		fits = new Fits();
 	}
 	

@@ -58,11 +58,11 @@
    		<xsl:attribute name="format">    
    			<xsl:variable name="format">
 	   			<xsl:choose>
-		   			<xsl:when test="not(string-length($jfif) = 0) and not(exiftool/FileType = 'JP2')">
-						<xsl:value-of select="concat(exiftool/FileType,' JFIF')" />
-					</xsl:when>
 					<xsl:when test="not(string-length($exif) = 0) and not(exiftool/FileType = 'JP2')">
 						<xsl:value-of select="concat(exiftool/FileType,' EXIF')" />
+					</xsl:when>
+		   			<xsl:when test="not(string-length($jfif) = 0) and not(exiftool/FileType = 'JP2')">
+						<xsl:value-of select="concat(exiftool/FileType,' JFIF')" />
 					</xsl:when>
 					<xsl:when test="not(string-length($exifByteOrder) = 0) and not(exiftool/FileType = 'JP2')">
 						<xsl:value-of select="concat(exiftool/FileType,' EXIF')" />
@@ -82,9 +82,6 @@
 				<xsl:when test="$format='JPEG JFIF'">
 					<xsl:value-of select="string('JPEG File Interchange Format')"/>
 				</xsl:when>
-				<xsl:when test="$format='JPEG EXIF'">
-					<xsl:value-of select="string('Exchangeable Image File Format')"/>
-				</xsl:when>
 				<xsl:when test="$format='PSD EXIF'">
 					<xsl:value-of select="string('Adobe Photoshop')"/>
 				</xsl:when>
@@ -98,9 +95,6 @@
 					<xsl:value-of select="string('Graphics Interchange Format')"/>
 				</xsl:when>
 				<xsl:when test="$format='TIFF'">
-					<xsl:value-of select="string('Tagged Image File Format')"/>						
-				</xsl:when>
-				<xsl:when test="$format='TIFF EXIF'">
 					<xsl:value-of select="string('Tagged Image File Format')"/>						
 				</xsl:when>
 				<xsl:when test="$format='AVI'">

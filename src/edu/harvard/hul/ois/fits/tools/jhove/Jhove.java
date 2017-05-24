@@ -46,13 +46,15 @@ public class Jhove extends ToolBase {
     private XmlHandler xh;
     private String jhoveConf;
     private boolean enabled = true;
+    private Fits fits;
+
+    private final static Calendar calendar = GregorianCalendar.getInstance();
+    private final static String jhoveFitsConfig = Fits.FITS_XML_DIR + "jhove" + File.separator;
     private static final Logger logger = Logger.getLogger(Jhove.class);
 
-    public final static Calendar calendar = GregorianCalendar.getInstance();
-
-    public final static String jhoveFitsConfig = Fits.FITS_XML_DIR+"jhove"+File.separator;
-
-	public Jhove() throws FitsException {
+	public Jhove(Fits fits) throws FitsException {
+		super();
+		this.fits = fits;
         logger.debug ("Initializing Jhove");
 
 		try {
@@ -66,7 +68,7 @@ public class Jhove extends ToolBase {
             jhove.setSignatureFlag(false);
             jhove.setShowRawFlag(false);
       	    xh = new XmlHandler();
-      	    jhoveApp = new App ("Jhove","1.11", new int[] {2015, 05, 25}, "","");
+      	    jhoveApp = new App ("Jhove","1.16", new int[] {2017, 03, 15}, "","");
             xh.setApp(jhoveApp);
             xh.setBase(jhove);
 		}
@@ -135,7 +137,7 @@ public class Jhove extends ToolBase {
 		}
 		catch (OutOfMemoryError e) {
             logger.error("Jhove OutOfMemoryError while processing "+file.getName());
-			throw new FitsToolException("Jhove OutOfMemoryError while processing "+file.getName());
+			throw new FitsToolException("Jhove OutOfMemoryError while processing "+file.getName(), e);
 		}
 		String format = XmlUtils.getDomValue(dom,"format");
 		String xsltTransform = (String)transformMap.get(format.toUpperCase());
@@ -148,7 +150,7 @@ public class Jhove extends ToolBase {
 			fitsXml = transform(jhoveFitsConfig+"jhove_text_to_fits.xslt",dom);
 		}
 
-		output = new ToolOutput(this,fitsXml,dom);
+		output = new ToolOutput(this,fitsXml,dom, fits);
 		duration = System.currentTimeMillis()-startTime;
 		runStatus = RunStatus.SUCCESSFUL;
         logger.debug("Jhove.extractInfo finished on " + file.getName());

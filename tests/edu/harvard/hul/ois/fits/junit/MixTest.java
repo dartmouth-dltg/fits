@@ -23,7 +23,6 @@ import java.io.File;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.junit.AfterClass;
@@ -32,10 +31,10 @@ import org.junit.Test;
 
 import edu.harvard.hul.ois.fits.Fits;
 import edu.harvard.hul.ois.fits.FitsOutput;
-import edu.harvard.hul.ois.ots.schemas.DocumentMD.DocumentMD;
+import edu.harvard.hul.ois.fits.tests.AbstractLoggingTest;
 import edu.harvard.hul.ois.ots.schemas.MIX.Mix;
 
-public class MixTest {
+public class MixTest extends AbstractLoggingTest {
 
 	/*
 	 *  Only one Fits instance is needed to run all tests.
@@ -45,10 +44,11 @@ public class MixTest {
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		// Set up XMLUnit and FITS for entire class.
-		XMLUnit.setIgnoreWhitespace(true);
-		XMLUnit.setNormalizeWhitespace(true);
+		// Set up FITS for entire class.
 		fits = new Fits();
+		// Use this instead of above line to turn on tool output.
+//		File fitsConfigFile = new File("testfiles/properties/fits-full-with-tool-output.xml");
+//		fits = new Fits(null, fitsConfigFile);
 	}
 	
 	@AfterClass
@@ -88,22 +88,22 @@ public class MixTest {
 		fitsOut.addStandardCombinedFormat();
 		serializer.output(fitsOut.getFitsXml(), System.out);
 		
-		DocumentMD docmd = (DocumentMD)fitsOut.getStandardXmlContent();
+		Mix mix = (Mix)fitsOut.getStandardXmlContent();
 		
-		if(docmd != null) {
-			docmd.setRoot(true);
+		if(mix != null) {
+			mix.setRoot(true);
 			XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
 			XMLStreamWriter writer = xmlof.createXMLStreamWriter(System.out); 
 			
-			docmd.output(writer);
+			mix.output(writer);
 		}
     	fitsOut.saveToDisk("test-generated-output/" + inputFilename + "_Output.xml");
 	}
     
 	@Test
 	public void testMixJpg() throws Exception {	
-    	Fits fits = new Fits("");
-    	String filename = "3426592.jpg";
+
+		String filename = "3426592.jpg";
     	File input = new File("testfiles/" + filename);
     	
     	FitsOutput fitsOut = fits.examine(input);
@@ -118,6 +118,62 @@ public class MixTest {
 		XMLStreamWriter writer = xmlof.createXMLStreamWriter(System.out); 
 		
 		mix.output(writer);
+		fitsOut.addStandardCombinedFormat(); // output all data to file
+		fitsOut.saveToDisk("test-generated-output/" + filename + "_Output.xml");
+
+	}
+    
+	@Test
+	public void testJpgExif() throws Exception {	
+
+		String filename = "ICFA.KC.BIA.1524-small.jpg";
+    	File input = new File("testfiles/" + filename);
+    	
+    	FitsOutput fitsOut = fits.examine(input);
+    	
+		XMLOutputter serializer = new XMLOutputter(Format.getPrettyFormat());
+		serializer.output(fitsOut.getFitsXml(), System.out);
+				
+		XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
+		XMLStreamWriter writer = xmlof.createXMLStreamWriter(System.out); 
+		
+		fitsOut.addStandardCombinedFormat(); // output all data to file
+		fitsOut.saveToDisk("test-generated-output/" + filename + "_Output.xml");
+
+	}
+    
+	@Test
+	public void testJpgJfif() throws Exception {	
+
+		String filename = "gps.jpg";
+    	File input = new File("testfiles/" + filename);
+    	
+    	FitsOutput fitsOut = fits.examine(input);
+    	
+		XMLOutputter serializer = new XMLOutputter(Format.getPrettyFormat());
+		serializer.output(fitsOut.getFitsXml(), System.out);
+				
+		XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
+		XMLStreamWriter writer = xmlof.createXMLStreamWriter(System.out); 
+		
+		fitsOut.addStandardCombinedFormat(); // output all data to file
+		fitsOut.saveToDisk("test-generated-output/" + filename + "_Output.xml");
+
+	}
+    
+	@Test
+	public void testJpg2() throws Exception {	
+
+		String filename = "JPEGTest_20170591--JPEGTest_20170591.jpeg";
+    	File input = new File("testfiles/" + filename);
+    	
+    	FitsOutput fitsOut = fits.examine(input);
+    	
+		XMLOutputter serializer = new XMLOutputter(Format.getPrettyFormat());
+		serializer.output(fitsOut.getFitsXml(), System.out);
+				
+		XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
+		
 		fitsOut.addStandardCombinedFormat(); // output all data to file
 		fitsOut.saveToDisk("test-generated-output/" + filename + "_Output.xml");
 

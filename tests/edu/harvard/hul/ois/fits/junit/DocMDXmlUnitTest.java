@@ -18,26 +18,18 @@
  */
 package edu.harvard.hul.ois.fits.junit;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLIdentical;
-
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
-import org.custommonkey.xmlunit.DetailedDiff;
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.Difference;
-import org.custommonkey.xmlunit.XMLUnit;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
 import edu.harvard.hul.ois.fits.Fits;
 import edu.harvard.hul.ois.fits.FitsOutput;
+import edu.harvard.hul.ois.fits.tests.AbstractXmlUnitTest;
 
 /**
  * These tests compare actual FITS output with expected output on various word processing documents.
@@ -45,23 +37,7 @@ import edu.harvard.hul.ois.fits.FitsOutput;
  * 
  * @author dan179
  */
-public class DocMDXmlUnitTest {
-	
-	private static final String ACTUAL_OUTPUT_FILE_SUFFIX = "_XmlUnitActualOutput.xml";
-	private static final String EXPECTED_OUTPUT_FILE_SUFFIX = "_XmlUnitExpectedOutput.xml";
-	private static final String[] IGNORED_XML_ELEMENTS = {
-			"version",
-			"toolversion",
-			"dateModified",
-			"fslastmodified",
-			"startDate",
-			"startTime",
-			"timestamp", 
-			"fitsExecutionTime",
-			"executionTime",
-			"filepath",
-			"location",
-			"lastmodified"};
+public class DocMDXmlUnitTest extends AbstractXmlUnitTest {
 	
 	/*
 	 *  Only one Fits instance is needed to run all tests.
@@ -71,9 +47,7 @@ public class DocMDXmlUnitTest {
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		// Set up XMLUnit and FITS for entire class.
-		XMLUnit.setIgnoreWhitespace(true);
-		XMLUnit.setNormalizeWhitespace(true);
+		// Set up FITS for entire class.
 		fits = new Fits();
 	}
 	
@@ -218,6 +192,50 @@ public class DocMDXmlUnitTest {
 	public void testWordDocPasswordAndEncrypted() throws Exception {
 
     	String inputFilename = "Word_protected_encrypted.doc";
+    	File input = new File("testfiles/" + inputFilename);
+    	FitsOutput fitsOut = fits.examine(input);
+    	fitsOut.addStandardCombinedFormat();
+    	fitsOut.saveToDisk("test-generated-output/" + inputFilename + ACTUAL_OUTPUT_FILE_SUFFIX);
+    	
+		XMLOutputter serializer = new XMLOutputter(Format.getPrettyFormat());
+		String actualXmlStr = serializer.outputString(fitsOut.getFitsXml());
+
+		// Read in the expected XML file
+		Scanner scan = new Scanner(new File(
+				"testfiles/output/" + inputFilename + EXPECTED_OUTPUT_FILE_SUFFIX));
+		String expectedXmlStr = scan.
+				useDelimiter("\\Z").next();
+		scan.close();
+
+		testActualAgainstExpected(actualXmlStr, expectedXmlStr, inputFilename);
+	}
+    
+	@Test
+	public void testWordDocMacMSWord() throws Exception {
+
+    	String inputFilename = "MacMSWORD_4-5.doc";
+    	File input = new File("testfiles/" + inputFilename);
+    	FitsOutput fitsOut = fits.examine(input);
+    	fitsOut.addStandardCombinedFormat();
+    	fitsOut.saveToDisk("test-generated-output/" + inputFilename + ACTUAL_OUTPUT_FILE_SUFFIX);
+    	
+		XMLOutputter serializer = new XMLOutputter(Format.getPrettyFormat());
+		String actualXmlStr = serializer.outputString(fitsOut.getFitsXml());
+
+		// Read in the expected XML file
+		Scanner scan = new Scanner(new File(
+				"testfiles/output/" + inputFilename + EXPECTED_OUTPUT_FILE_SUFFIX));
+		String expectedXmlStr = scan.
+				useDelimiter("\\Z").next();
+		scan.close();
+
+		testActualAgainstExpected(actualXmlStr, expectedXmlStr, inputFilename);
+	}
+    
+	@Test
+	public void testWordDocV2() throws Exception {
+
+    	String inputFilename = "NEWSSLID_Word2_0.DOC";
     	File input = new File("testfiles/" + inputFilename);
     	FitsOutput fitsOut = fits.examine(input);
     	fitsOut.addStandardCombinedFormat();
@@ -501,7 +519,6 @@ public class DocMDXmlUnitTest {
 	public void testPdf() throws Exception {
 		
     	String[] inputFilenames = {"PDF_embedded_resources.pdf",
-//    			"PDF_equations.pdf", // different "font" output when running in Java 7 vs. Java 8
     			"HasChangeHistory.pdf",
     			"PDF_eng.pdf",
     			"HasAnnotations.pdf"};
@@ -584,34 +601,6 @@ public class DocMDXmlUnitTest {
 	
 			testActualAgainstExpected(actualXmlStr, expectedXmlStr, inputFilename);
     	}
-	}
-
-	/*
-	 * This method performs the actual test of actual FITS output against expected.
-	 */
-	private void testActualAgainstExpected(String actualXmlStr, String expectedXmlStr, String inputFilename)
-			throws SAXException, IOException {
-		Diff diff = new Diff(expectedXmlStr,actualXmlStr);
-
-		// Initialize attributes or elements to ignore for difference checking
-		diff.overrideDifferenceListener(new IgnoreNamedElementsDifferenceListener(IGNORED_XML_ELEMENTS));
-
-		DetailedDiff detailedDiff = new DetailedDiff(diff);
-
-		// Display any Differences
-		@SuppressWarnings("unchecked")
-		List<Difference> diffs = detailedDiff.getAllDifferences();
-		if (!diff.identical()) { 
-			StringBuffer differenceDescription = new StringBuffer(); 
-			differenceDescription.append(diffs.size()).append(" differences"); 
-			
-			System.out.println(differenceDescription.toString());
-			for(Difference difference : diffs) {
-				System.out.println(difference.toString());
-			}
-
-		}
-		assertXMLIdentical("Differences in XML for file: " + inputFilename, diff, true);
 	}
 
 }
