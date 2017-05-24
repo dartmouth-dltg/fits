@@ -23,7 +23,6 @@ import java.io.File;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.custommonkey.xmlunit.XMLUnit;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.junit.AfterClass;
@@ -32,6 +31,7 @@ import org.junit.Test;
 
 import edu.harvard.hul.ois.fits.Fits;
 import edu.harvard.hul.ois.fits.FitsOutput;
+import edu.harvard.hul.ois.fits.tests.AbstractLoggingTest;
 import edu.harvard.hul.ois.ots.schemas.DocumentMD.DocumentMD;
 
 /**
@@ -40,7 +40,7 @@ import edu.harvard.hul.ois.ots.schemas.DocumentMD.DocumentMD;
  * 
  * @author dan179
  */
-public class DocMDTest {
+public class DocMDTest extends AbstractLoggingTest {
 
 	/*
 	 *  Only one Fits instance is needed to run all tests.
@@ -50,9 +50,7 @@ public class DocMDTest {
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		// Set up XMLUnit and FITS for entire class.
-		XMLUnit.setIgnoreWhitespace(true);
-		XMLUnit.setNormalizeWhitespace(true);
+		// Set up FITS for entire class.
 		File fitsConfigFile = new File("testfiles/properties/fits-full-with-tool-output.xml");
 		fits = new Fits(null, fitsConfigFile);
 	}
@@ -441,7 +439,6 @@ public class DocMDTest {
 	public void testPdf() throws Exception {
 		
     	String[] inputFilenames = {"PDF_embedded_resources.pdf",
-    			"PDF_equations.pdf",
     			"HasChangeHistory.pdf",
     			"PDF_eng.pdf",
     			"HasAnnotations.pdf"};
