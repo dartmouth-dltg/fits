@@ -80,7 +80,11 @@ public class FFmpeg extends ToolBase {
 
     private static final Logger logger = Logger.getLogger(FFmpeg.class);
 
-	public FFmpeg() throws FitsException {
+	private Fits fits;
+
+	public FFmpeg(Fits fits) throws FitsToolException {
+		super();
+		this.fits = fits;
         logger.debug ("Initializing ffmpeg");
 
 		String osName = System.getProperty("os.name");
@@ -135,7 +139,7 @@ public class FFmpeg extends ToolBase {
 
 		Document fitsXML = transform(XSLT, ffprobeXML);
 
-		output = new ToolOutput(this, fitsXML, ffprobeXML);
+		output = new ToolOutput(this, fitsXML, ffprobeXML, fits);
 
 		duration = System.currentTimeMillis() - startTime;
 		runStatus = RunStatus.SUCCESSFUL;
