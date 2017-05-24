@@ -207,6 +207,9 @@
 				<xsl:when test="$format='MP4'">
 					<xsl:value-of select="string('ISO Media, MPEG v4 system, version 2')"/>
 				</xsl:when>
+				<xsl:when test="$format='MOV'">
+					<xsl:value-of select="string('ISO Media, Apple QuickTime movie')"/>
+				</xsl:when>
 				<xsl:when test="$format='SVG'">
 					<xsl:value-of select="string('Scalable Vector Graphics (SVG)')"/>
 				</xsl:when>

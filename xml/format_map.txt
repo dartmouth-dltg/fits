@@ -22,6 +22,7 @@ Audio Video Interleave File=Audio/Video Interleaved Format
 Photoshop Image=Adobe Photoshop
 Macromedia FLV=Flash Video (FLV)
 Digital Negative Format (DNG)=Digital Negative (DNG)
+Quicktime=ISO Media, Apple QuickTime movie
 Rich Text Format=Rich Text Format (RTF)
 ePub format=EPUB
 Electronic Publication=EPUB
@@ -37,3 +38,4 @@ Material Exchange Format=Material Exchange Format (MXF)
 Microsoft Office Open XML=Office Open XML Document
 Office Open XML Document (macro-enabled)=Office Open XML Document (Macros Enabled)
 Comma Separated Values=Comma-Separated Values (CSV)
+
