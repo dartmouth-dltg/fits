@@ -7,10 +7,10 @@
 
   <xsl:template match="/">
 
-   	<xsl:variable name="jfif" select="exiftool/JFIFVersion"/>
-   	<xsl:variable name="exif" select="exiftool/ExifVersion"/>
-   	<xsl:variable name="exifByteOrder" select="exiftool/ExifByteOrder"/>			
-    <xsl:variable name="mime" select="exiftool/MIMEType"/>
+   	<xsl:variable name="jfif" select="exiftool/JFIFVersion[1]"/>
+   	<xsl:variable name="exif" select="exiftool/ExifVersion[1]"/>
+   	<xsl:variable name="exifByteOrder" select="exiftool/ExifByteOrder[1]"/>			
+    <xsl:variable name="mime" select="exiftool/MIMEType[1]"/>
 	<identification>
     <identity>
     	<!-- format and mime type -->
@@ -46,6 +46,9 @@
 				<xsl:when test="$mime='application/photoshop'">
 					<xsl:value-of select="string('image/vnd.adobe.photoshop')"/>
 				</xsl:when>		
+                <xsl:when test="$mime='application/vnd.adobe.illustrator'">
+                    <xsl:value-of select="string('application/postscript')"/>
+                </xsl:when>
 				<xsl:when test="not($mime) or $mime='' or $mime='application/unknown'">
 					<xsl:value-of select="string('application/octet-stream')"/>
 				</xsl:when>			
@@ -55,7 +58,29 @@
 			</xsl:choose>
 		</xsl:attribute>
    			
-   		<xsl:attribute name="format">    
+   		<xsl:attribute name="format">
+   			<xsl:variable name="pdfxVersion">
+   				<!-- this could be an array so we convert to a single string -->
+   				<xsl:choose>
+   					<xsl:when test="exiftool/GTS_PDFXVersion">
+   						<xsl:value-of select="exiftool/GTS_PDFXVersion"/>
+   					</xsl:when>
+   					<xsl:otherwise>
+   						<xsl:value-of select="''"/>
+   					</xsl:otherwise>
+   				</xsl:choose>
+   			</xsl:variable>
+   			<xsl:variable name="pdfaVersion">
+   				<!-- this could be an array so we convert to a single string -->
+   				<xsl:choose>
+   					<xsl:when test="exiftool/SchemasSchema">
+   						<xsl:value-of select="exiftool/SchemasSchema"/>
+   					</xsl:when>
+   					<xsl:otherwise>
+   						<xsl:value-of select="''"/>
+   					</xsl:otherwise>
+   				</xsl:choose>
+   			</xsl:variable>
    			<xsl:variable name="format">
 	   			<xsl:choose>
 					<xsl:when test="not(string-length($exif) = 0) and not(exiftool/FileType = 'JP2')">
@@ -67,14 +92,14 @@
 					<xsl:when test="not(string-length($exifByteOrder) = 0) and not(exiftool/FileType = 'JP2')">
 						<xsl:value-of select="concat(exiftool/FileType,' EXIF')" />
 					</xsl:when>
-                    <xsl:when test="exiftool/GTS_PDFXVersion and starts-with(exiftool/GTS_PDFXVersion, 'PDF/X')">
-                        <xsl:value-of select="string('PDF/X')" />
-					</xsl:when>
-                    <xsl:when test="exiftool/SchemasSchema and starts-with(exiftool/SchemasSchema, 'PDF/A')">
-                        <xsl:value-of select="string('PDF/A')" />
-                    </xsl:when>
+					<xsl:when test="contains($pdfxVersion, 'PDF/X')">
+	   					<xsl:value-of select="string('PDF/X')" />
+	   				</xsl:when>
+	   				<xsl:when test="contains($pdfaVersion, 'PDF/A')">
+						<xsl:value-of select="string('PDF/A')" />
+	   				</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="exiftool/FileType" />
+						<xsl:value-of select="exiftool/FileType[1]" />
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
@@ -246,22 +271,22 @@
 		<xsl:choose>
 			<xsl:when test="exiftool/JFIFVersion">
 				<version>
-					<xsl:value-of select="exiftool/JFIFVersion"/>
+					<xsl:value-of select="exiftool/JFIFVersion[1]"/>
 				</version>
 			</xsl:when>
 			<xsl:when test="exiftool/GIFVersion">
 				<version>
-					<xsl:value-of select="exiftool/GIFVersion"/>
+					<xsl:value-of select="exiftool/GIFVersion[1]"/>
 				</version>		
 			</xsl:when>
 			<xsl:when test="exiftool/VorbisVersion">
 				<version>
-					<xsl:value-of select="exiftool/VorbisVersion"/>	
+					<xsl:value-of select="exiftool/VorbisVersion[1]"/>	
 				</version>		
 			</xsl:when>
 			<xsl:when test="exiftool/Version">
 				<version>
-					<xsl:value-of select="exiftool/Version"/>
+					<xsl:value-of select="exiftool/Version[1]"/>
 				</version>	
 			</xsl:when>
 			<xsl:when test="exiftool/ZipVersion">
@@ -273,7 +298,7 @@
 			</xsl:when>
 			<xsl:when test="exiftool/DNGVersion">
 				<version>
-					<xsl:value-of select="exiftool/DNGVersion"/>	
+					<xsl:value-of select="exiftool/DNGVersion[1]"/>	
 				</version>		
 			</xsl:when>
 		</xsl:choose>	
@@ -282,47 +307,54 @@
     </identification>
     
     <fileinfo>
-      	<lastmodified>
-   			<xsl:value-of select="exiftool/ModifyDate"/>
-    	</lastmodified>
+    	<xsl:if test="exiftool/ModifyDate">
+	      	<lastmodified>
+	   			<xsl:value-of select="exiftool/ModifyDate[1]"/>
+	    	</lastmodified>
+    	</xsl:if>
     	<created>
 	    	<xsl:choose>
 	    		<xsl:when test="exiftool/DateTime">
-					<xsl:value-of select="exiftool/DateTime"/>		
+					<xsl:value-of select="exiftool/DateTime[1]"/>		
 				</xsl:when>	    	
 	    		<xsl:when test="exiftool/DateTimeDigitized">
-					<xsl:value-of select="exiftool/DateTimeDigitized"/>		
+					<xsl:value-of select="exiftool/DateTimeDigitized[1]"/>		
 				</xsl:when>
 	    		<xsl:when test="exiftool/CreateDate">
-					<xsl:value-of select="exiftool/CreateDate"/>		
+					<xsl:value-of select="exiftool/CreateDate[1]"/>		
 				</xsl:when>
 			</xsl:choose>
 		</created>	
 		<creatingApplicationName>
 			<xsl:choose>
 				<xsl:when test="$mime='image/tiff'">
-					<xsl:value-of select="exiftool/Software"/>						
+					<xsl:value-of select="exiftool/Software[1]"/>						
 				</xsl:when>
 				<xsl:when test="$mime='image/jpeg'">
 					<xsl:choose>
 						<xsl:when test="exiftool/Model">
-							<xsl:value-of select="exiftool/Model"/>	
+							<xsl:value-of select="exiftool/Model[1]"/>	
 						</xsl:when>
 						<xsl:when test="exiftool/Comment">
-							<xsl:value-of select="exiftool/Comment"/>	
+							<xsl:value-of select="exiftool/Comment[1]"/>
 						</xsl:when>
 					</xsl:choose>				
 				</xsl:when>
 				<xsl:when test="$mime='image/jp2'">
-					<xsl:value-of select="exiftool/Model"/>					
+					<xsl:value-of select="exiftool/Model[1]"/>					
 				</xsl:when>	
 				<xsl:when test="$mime='application/pdf'">
-					<xsl:if test="exiftool/Producer and //exiftool/CreatorTool">
-						<xsl:value-of select="concat(exiftool/Producer,'/',//exiftool/CreatorTool)"/>
+					<xsl:if test="exiftool/Producer and exiftool/CreatorTool">
+						<xsl:value-of select="concat(exiftool/Producer[1],'/',exiftool/CreatorTool[1])"/>
 					</xsl:if>			
 				</xsl:when>		
 				<xsl:when test="$mime='application/msword'">
-					<xsl:value-of select="exiftool/Software"/>			
+					<xsl:variable name="asdf"></xsl:variable>
+					<xsl:if test="exiftool/Software">
+						<xsl:for-each select="exiftool/Software">
+							<xsl:if test="contains(.,'Word')"><xsl:value-of select="."/></xsl:if>
+						</xsl:for-each>
+					</xsl:if>
 				</xsl:when>			
                 <xsl:when test="$mime='application/vnd.oasis.opendocument.text'">
                     <xsl:value-of select="exiftool/Generator"/>          
@@ -334,21 +366,23 @@
 				<xsl:when test="$mime='application/msword' or
 				        $mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document' or
 				        $mime='application/vnd.ms-word.document.macroEnabled'">
-					<xsl:value-of select="exiftool/AppVersion"/>			
+				    <xsl:if test="exiftool/AppVersion">
+						<xsl:value-of select="exiftool/AppVersion[1]"/>			
+				    </xsl:if>
 				</xsl:when>
 			</xsl:choose>
 		</creatingApplicationVersion>
 		<inhibitorType>
 			<xsl:choose>
 				<xsl:when test="$mime='application/pdf'">
-					<xsl:value-of select="exiftool/Encryption"/>		
+					<xsl:value-of select="exiftool/Encryption[1]"/>
 				</xsl:when>		
 			</xsl:choose>		
 		</inhibitorType>
 		<copyrightNote>
 			<xsl:choose>
 				<xsl:when test="$mime='application/pdf'">
-					<xsl:value-of select="exiftool/Rights"/>		
+					<xsl:value-of select="exiftool/Rights[1]"/>
 				</xsl:when>		
 			</xsl:choose>		
 		</copyrightNote>
