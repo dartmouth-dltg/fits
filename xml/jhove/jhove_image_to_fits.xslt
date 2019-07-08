@@ -51,7 +51,7 @@ xmlns:mix="http://www.loc.gov/mix/v20">
 				<xsl:otherwise>
 					<!-- otherwise use mix metadata -->
 					<compressionScheme>
-					     <xsl:value-of select="(//mix:compressionScheme)[1]"/> <!-- Take the first width found -->
+					     <xsl:value-of select="(//mix:compressionScheme)[1]"/>
 					</compressionScheme> 				
 				</xsl:otherwise>
 			</xsl:choose>
@@ -63,7 +63,7 @@ xmlns:mix="http://www.loc.gov/mix/v20">
 			
 			<!--  height -->
 			<imageHeight>
-		  		<xsl:value-of select="(//mix:imageLength)[1]"/> <!-- Take the first height found -->
+		  		<xsl:value-of select="(//mix:imageHeight)[1]"/> <!-- Take the first height found -->
 			</imageHeight>
 		
 			<!--  colorspace -->
@@ -171,14 +171,14 @@ xmlns:mix="http://www.loc.gov/mix/v20">
 			<xSamplingFrequency>
 			    <xsl:variable name="xNumerator" select="//mix:xSamplingFrequency/mix:numerator"/>
                 <xsl:variable name="xDenominator" select="//mix:xSamplingFrequency/mix:denominator"/>
-		  		<xsl:value-of select="round($xNumerator div $xDenominator)"/>
+		  		<xsl:value-of select="round($xNumerator[1] div $xDenominator[1])"/>
 			</xSamplingFrequency>
 			
 			<!--  ySamplingFrequency -->
 			<ySamplingFrequency>
                 <xsl:variable name="yNumerator" select="//mix:ySamplingFrequency/mix:numerator"/>
                 <xsl:variable name="yDenominator" select="//mix:ySamplingFrequency/mix:denominator"/>
-		  		<xsl:value-of select="round($yNumerator div $yDenominator)"/>
+		  		<xsl:value-of select="round($yNumerator[1] div $yDenominator[1])"/>
 			</ySamplingFrequency>
 			
 			<!--  bitsPerSample -->

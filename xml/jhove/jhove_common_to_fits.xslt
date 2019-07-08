@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="2.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:fits_XsltFunctions="edu.harvard.hul.ois.fits.tools.utils.XsltFunctions"
 	xmlns:mix="http://www.loc.gov/mix/v20"
 	xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output">
 	<xsl:output method="xml" indent="yes" />
@@ -21,6 +20,9 @@
 					<xsl:when test="$mime='text/plain; charset=UTF-8'">
 						<xsl:value-of select="string('text/plain')"/>
 					</xsl:when>
+                    <xsl:when test="starts-with($mime, 'audio/vnd.wave')">
+                        <xsl:value-of select="string('audio/x-wave')"/>
+                    </xsl:when>
 					<xsl:when test="normalize-space(upper-case(//property[name='Brand']/values/value))='JPX'">		
 						<xsl:value-of select="string('image/jpx')"/>
 					</xsl:when>
@@ -32,17 +34,17 @@
 			<!-- profile and format format attributes-->
 			<xsl:attribute name="format">
 				<xsl:variable name="format">
-				<xsl:choose>
-			  		<xsl:when test='string((repInfo/profiles/profile)[1])'>
-			  			<xsl:value-of select="concat(repInfo/format, ' ', (repInfo/profiles/profile)[1])"/>
-			  		</xsl:when>		
-			  		<xsl:when test="not(string-length($exif) = 0)">
-						<xsl:value-of select="concat(repInfo/format, ' ','EXIF')" />
-					</xsl:when>  		
-			  		<xsl:otherwise>
-			  			<xsl:value-of select="repInfo/format"/>
-					</xsl:otherwise>
-				</xsl:choose>
+					<xsl:choose>
+						<xsl:when test='string((repInfo/profiles/profile)[1])'>
+							<xsl:value-of select="concat(repInfo/format, ' ', (repInfo/profiles/profile)[1])"/>
+						</xsl:when>
+						<xsl:when test="not(string-length($exif) = 0)">
+							<xsl:value-of select="concat(repInfo/format, ' ','EXIF')" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="repInfo/format"/>
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:variable>
 				<xsl:choose>
 					<xsl:when test="$format='JPEG JFIF'">
@@ -78,14 +80,27 @@
 					<xsl:when test="$format='WAVE WAVEFORMATEX'">
 						<xsl:value-of select="string('Waveform Audio')"/>
 					</xsl:when>
+                    <xsl:when test="$format='WAVE'">
+                        <xsl:value-of select="string('Waveform Audio')"/>
+                    </xsl:when>
+                    <xsl:when test="starts-with($format,'JPEG Exif')">
+                        <xsl:value-of select="string('JPEG EXIF')"/>
+                    </xsl:when>
 					<xsl:when test="starts-with($format,'JPEG 2000')">
-						<xsl:choose>			
+						<xsl:choose>
 							<xsl:when test="//profiles[profile='JP2']">
 								<xsl:value-of select="string('JPEG 2000 JP2')"/>
 							</xsl:when>
-							<xsl:when test="//property[name='Brand']/values/value">		
+							<xsl:when test="//property[name='Brand']/values/value">
 								<xsl:value-of select="concat('JPEG 2000 ',normalize-space(upper-case(//property[name='Brand']/values/value)))"/>
 							</xsl:when>
+							<!-- not well-formed JP2 files will not have the above elements so using mimetype -->
+							<xsl:when test="$mime='image/jp2'">
+								<xsl:value-of select="string('JPEG 2000 JP2')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="string($format)"/>
+							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>		
 					<xsl:when test="starts-with($format,'TIFF DNG')">
@@ -239,16 +254,23 @@
 			  </xsl:otherwise>
 			</xsl:choose>
 		
-		
-		<xsl:for-each select="repInfo/messages/message">
-			<message>
-				<xsl:variable name="messageText" select="."/>
-				<xsl:variable name="subMessage" select="@subMessage"/>
-				<xsl:variable name="severity" select="@severijty"/>
-				<xsl:variable name="offset" select="@offset"/>
-				<xsl:value-of select="fits_XsltFunctions:getMessageString($messageText,$subMessage,$severity,$offset)"/>				
-			</message>
-		</xsl:for-each>
+        <xsl:for-each select="repInfo/messages/message">
+            <message>
+                <xsl:value-of select="."/>
+                <xsl:if test="@subMessage">
+                    <xsl:value-of select="string(' ')"/>
+                    <xsl:value-of select="@subMessage"/>
+                </xsl:if>         
+                <xsl:if test="@severity">
+	                <xsl:value-of select="string(' severity=')"/>
+	                <xsl:value-of select="@severity"/>
+                </xsl:if>         
+                <xsl:if test="@offset">
+                    <xsl:value-of select="string(' offset=')"/>
+                    <xsl:value-of select="@offset"/>
+                </xsl:if>         
+            </message>
+        </xsl:for-each>
 	</filestatus>
 	
 	</xsl:template>
